@@ -274,7 +274,7 @@ public class SortService
         var genreCounts = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
         foreach (var movie in userMovies)
         {
-            var genres = movie.Inner.Genres;
+            var genres = movie.Genres;
             if (genres != null)
             {
                 foreach (var genre in genres)
@@ -289,7 +289,7 @@ public class SortService
         }
         foreach (var series in userSeries)
         {
-            var genres = series.Inner.Genres;
+            var genres = series.Genres;
             if (genres != null)
             {
                 foreach (var genre in genres)

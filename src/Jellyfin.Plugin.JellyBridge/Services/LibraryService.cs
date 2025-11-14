@@ -2,6 +2,7 @@ using Microsoft.Extensions.Logging;
 using Jellyfin.Plugin.JellyBridge.Configuration;
 using Jellyfin.Plugin.JellyBridge.Utils;
 using Jellyfin.Plugin.JellyBridge.JellyfinModels;
+using MediaBrowser.Controller.Entities;
 using MediaBrowser.Controller.Providers;
 using System;
 using System.IO;
@@ -57,7 +58,7 @@ public class LibraryService
             _logger.LogDebug("Starting Jellyseerr library refresh (CreateMode: {CreateMode}, RemoveMode: {RemoveMode})...", createMode, removeMode);
 
             // Find all libraries that contain JellyBridge folders
-            var libraries = _libraryManager.Inner.GetVirtualFolders();
+            var libraries = _libraryManager.GetVirtualFolders();
             var bridgeLibraries = libraries.Where(lib => 
                 lib.Locations?.Any(location => FolderUtils.IsPathInSyncDirectory(location)) == true).ToList();
 
@@ -134,7 +135,7 @@ public class LibraryService
                     // ItemId is a string property containing a GUID, so we need to parse it
                     var libraryItemId = Guid.Parse(bridgeLibrary.ItemId);
 
-                    var libraryFolder = _libraryManager.Inner.GetItemById(libraryItemId);
+                    var libraryFolder = _libraryManager.GetItemById<BaseItem>(libraryItemId);
                     if (libraryFolder == null)
                     {
                         throw new InvalidOperationException("Library folder not found");
@@ -231,7 +232,7 @@ public class LibraryService
             _logger.LogDebug("Starting full scan of all Jellyfin libraries for first-time initialization...");
 
             // Use the same method as the "Scan All Libraries" button
-                    await _libraryManager.Inner.ValidateMediaLibrary(new Progress<double>(), CancellationToken.None);
+            await _libraryManager.ValidateMediaLibrary(new Progress<double>(), CancellationToken.None);
 
             _logger.LogDebug("Full scan of all libraries completed successfully");
             

@@ -233,4 +233,40 @@ public class JellyfinILibraryManager : WrapperBase<ILibraryManager>
         return null;
     }
 
+    /// <summary>
+    /// Gets all virtual folders (libraries).
+    /// </summary>
+    /// <returns>List of virtual folder info</returns>
+    public List<VirtualFolderInfo> GetVirtualFolders()
+    {
+        return Inner.GetVirtualFolders();
+    }
+
+    /// <summary>
+    /// Gets an item by its ID.
+    /// </summary>
+    /// <typeparam name="T">The type of item to retrieve</typeparam>
+    /// <param name="itemId">The item ID</param>
+    /// <param name="user">The user context</param>
+    /// <returns>The item if found, null otherwise</returns>
+    public T? GetItemById<T>(Guid itemId, JellyfinUser? user = null) where T : BaseItem
+    {
+        if (user != null)
+        {
+            return Inner.GetItemById<T>(itemId, user.Inner);
+        }
+        return Inner.GetItemById<T>(itemId);
+    }
+
+    /// <summary>
+    /// Validates the media library.
+    /// </summary>
+    /// <param name="progress">Progress reporter</param>
+    /// <param name="cancellationToken">Cancellation token</param>
+    /// <returns>Task representing the validation operation</returns>
+    public async Task ValidateMediaLibrary(IProgress<double> progress, CancellationToken cancellationToken)
+    {
+        await Inner.ValidateMediaLibrary(progress, cancellationToken).ConfigureAwait(false);
+    }
+
 }

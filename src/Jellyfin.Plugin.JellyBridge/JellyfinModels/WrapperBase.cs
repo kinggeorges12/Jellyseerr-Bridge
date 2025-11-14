@@ -7,7 +7,7 @@ namespace Jellyfin.Plugin.JellyBridge.JellyfinModels;
 /// <typeparam name="T">The wrapped Jellyfin type</typeparam>
 public abstract class WrapperBase<T> where T : class
 {
-    public readonly T Inner;
+    internal readonly T Inner;
 
     protected WrapperBase(T inner) => Inner = inner;
 
@@ -26,7 +26,7 @@ public abstract class WrapperBase<T> where T : class
         InitializeV10_11();
 #else
         // Jellyfin 10.10.* specific initialization
-        InitializeV10_10_7();
+        InitializeV10_10();
 #endif
     }
 
@@ -42,7 +42,7 @@ public abstract class WrapperBase<T> where T : class
     /// <summary>
     /// Jellyfin 10.10.* specific initialization.
     /// </summary>
-    protected virtual void InitializeV10_10_7()
+    protected virtual void InitializeV10_10()
     {
         // Current implementation for 10.10.*
     }

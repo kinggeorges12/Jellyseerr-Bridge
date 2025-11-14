@@ -90,7 +90,7 @@ public class JellyfinIUserDataManager : WrapperBase<IUserDataManager>
         try
         {
             var userEntity = user.Inner;
-            var baseItem = libraryManager.Inner.GetItemById<BaseItem>(item.Id, userEntity);
+            var baseItem = libraryManager.GetItemById<BaseItem>(item.Id, user);
             if (baseItem is null)
             {
                 return false;
@@ -257,6 +257,28 @@ public class JellyfinIUserDataManager : WrapperBase<IUserDataManager>
                 Message = ex.Message
             };
         }
+    }
+
+    /// <summary>
+    /// Saves user data for a user and item.
+    /// </summary>
+    /// <param name="user">The user</param>
+    /// <param name="item">The item</param>
+    /// <param name="userData">The user data to save</param>
+    /// <param name="saveReason">The reason for saving</param>
+    /// <param name="cancellationToken">Cancellation token</param>
+    public void SaveUserData(JellyfinUser user, BaseItem item, UserItemData userData, UserDataSaveReason saveReason, CancellationToken cancellationToken)
+    {
+        Inner.SaveUserData(user.Inner, item, userData, saveReason, cancellationToken);
+    }
+
+    /// <summary>
+    /// Event that fires when user data is saved.
+    /// </summary>
+    public event EventHandler<UserDataSaveEventArgs>? UserDataSaved
+    {
+        add => Inner.UserDataSaved += value;
+        remove => Inner.UserDataSaved -= value;
     }
 
 }

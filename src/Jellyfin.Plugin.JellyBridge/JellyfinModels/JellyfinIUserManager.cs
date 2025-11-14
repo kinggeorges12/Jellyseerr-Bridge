@@ -19,5 +19,20 @@ public class JellyfinIUserManager : WrapperBase<IUserManager>
     {
         return Inner.Users.Select(user => new JellyfinUser((dynamic)user));
     }
+
+    /// <summary>
+    /// Gets a user by ID.
+    /// </summary>
+    /// <param name="userId">The user ID</param>
+    /// <returns>The user if found, null otherwise</returns>
+    public JellyfinUser? GetUserById(Guid userId)
+    {
+        var user = Inner.GetUserById(userId);
+        if (user == null)
+        {
+            return null;
+        }
+        return new JellyfinUser((dynamic)user);
+    }
 }
 

@@ -75,6 +75,11 @@ public class JellyfinMovie : WrapperBase<Movie>, IJellyfinItem
     public Dictionary<string, string> ProviderIds => Inner.ProviderIds;
 
     /// <summary>
+    /// Get the genres for this movie.
+    /// </summary>
+    public IReadOnlyList<string> Genres => Inner.Genres;
+
+    /// <summary>
     /// Extract TMDB ID from movie metadata.
     /// </summary>
     /// <returns>TMDB ID if found, null otherwise</returns>
@@ -175,10 +180,9 @@ public class JellyfinMovie : WrapperBase<Movie>, IJellyfinItem
         // Only update if the current status doesn't match the desired status
         if (userData.Played != markAsPlayed)
         {
-            // Update play status - use the inner UserDataManager directly to set Played for this movie
-            var userEntity = user.Inner;
+            // Update play status using the wrapper method
             userData.Played = markAsPlayed;
-            userDataManager.Inner.SaveUserData(userEntity, Inner, userData, MediaBrowser.Model.Entities.UserDataSaveReason.Import, System.Threading.CancellationToken.None);
+            userDataManager.SaveUserData(user, Inner, userData, MediaBrowser.Model.Entities.UserDataSaveReason.Import, System.Threading.CancellationToken.None);
             
             var status = markAsPlayed ? "played" : "not played";
             return new JellyfinWrapperResult

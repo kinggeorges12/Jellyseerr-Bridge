@@ -203,7 +203,7 @@ public class BridgeService
     private Dictionary<string, HashSet<string>> GetBridgeLibraries()
     {
         var result = new Dictionary<string, HashSet<string>>();
-        var libraries = _libraryManager.Inner.GetVirtualFolders();
+        var libraries = _libraryManager.GetVirtualFolders();
         var bridgeLibraries = libraries.Where(lib => 
             lib.Locations?.Any(location => FolderUtils.IsPathInSyncDirectory(location)) == true).ToList();
         
